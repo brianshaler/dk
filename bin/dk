@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 
-dir=$(dirname $(readlink -f $BASH_SOURCE))
+bindir=$(dirname $BASH_SOURCE)
+symlink=$(dirname $(readlink $BASH_SOURCE))
+dir=$(
+  # go to bin dir
+  cd $bindir;
+  # follow relative symlink from there
+  cd $symlink;
+  # return absolute path to new location
+  pwd -P)
 
 subcmd=
 
