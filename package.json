@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "bin": {
-    "dk": "./bin/dk.js"
+    "dk": "./bin/dk",
+    "dkb": "./bin/dkb"
   },
   "scripts": {
     "test": "NODE_ENV=test mocha test/*.coffee --require coffee-script/register --reporter spec"
