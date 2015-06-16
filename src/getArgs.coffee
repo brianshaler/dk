@@ -1,7 +1,5 @@
 path = require 'path'
 
-commander = require 'commander'
-
 pkg = require '../package.json'
 
 collect = (val, memo) ->
