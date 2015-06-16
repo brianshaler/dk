@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+dir=$(dirname $(readlink $BASH_SOURCE))
+
+subcmd=
+
+while [ "$1" != "" ]; do
+  if [[ $(echo $1 | wc -w) > 1 ]]; then
+    subcmd="$subcmd \"$1\""
+  else
+    subcmd="$subcmd $1"
+  fi
+  shift
+done
+
+help=$(echo $subcmd | grep "\-\-help")
+
+if [[ $help != "" ]]; then
+  echo "help is [$help]"
+  cat <<HELP
+Usage: dk [OPTIONS] [TASK] [CMD] [arg...]
+
+Options:
+  -c, --container=$(basename $(pwd))    Set container name
+  --cwd=$(pwd)                          Set working directory
+  -d, --detached                        Detach container, run in the background
+  --debug                               Verbose dk output
+  -e, --env=VAR=val                     Set container env vars
+  -l, --link=containername:alias        Link to a running container
+  --name=                               Name this container
+  -p, --port=hostport:containerport     Bind host port to container port
+  -s, --preset=key                      Load settings from .dkrc
+  -v, --volume=hostpath:containerpath   Link a volume, relative paths are
+                                        resolved from cwd
+
+TASK is a key in the .dkrc file, if a match is present.
+
+CMD [default=bash] is the command that will be run inside the container.
+
+arg... are any args to be passed to the command running in the container.
+HELP
+  exit 0
+fi
+
+cwd=$(echo $subcmd | grep "\-\-cwd")
+
+if [[ $cwd != "" ]]; then
+  cwd=" --cwd=$(pwd)"
+fi
+
+nodecmd=$(echo "node $dir/dk.js $cwd $subcmd" | sed s/\\\$/\\\\\$/g)
+
+debug=$(echo $subcmd | grep "\-\-debug")
+
+if [[ $debug != "" ]]; then
+  echo "DEBUG"
+  echo $nodecmd
+  eval $nodecmd
+  exit 0
+fi
+
+#nodecmd=$(echo $nodecmd | sed -e s/\\\$/\\\\\$/g)
+#echo "\$ $($nodecmd)"
+eval $($nodecmd)
