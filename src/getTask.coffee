@@ -9,6 +9,7 @@ mergeOpts = (obj1, obj2) ->
       obj1[k] = _.merge (obj1[k] ? {}), obj2[k]
     else
       obj1[k] = v
+  return
 
 mergeOptsSoft = (obj1, obj2) ->
   return unless obj2
@@ -19,12 +20,14 @@ mergeOptsSoft = (obj1, obj2) ->
       for k2, v2 of obj2[k]
         if !obj1[k][k2]
           obj1[k][k2] = obj2[k][k2]
+  return
 
 mergeArgs = (obj, _args, delimiter = ':') ->
   return unless _args?.length > 0
   for arg in _args
     [srcOpt, destOpt] = arg.split delimiter
     obj[srcOpt] = destOpt
+  return
 
 getTask = (args) ->
   dkrcFile = path.join args.cwd, '.dkrc'
@@ -51,9 +54,13 @@ getTask = (args) ->
     for preset in args.preset
       mergeOpts task, dkrc[preset] if dkrc[preset]
 
+  task.links = {} unless task.links
   mergeArgs task.links, args.link
+  task.ports = {} unless task.ports
   mergeArgs task.ports, args.port
+  task.env = {} unless task.env
   mergeArgs task.env, args.env, '='
+  task.volumes = {} unless task.volumes
   mergeArgs task.volumes, args.volume
 
   if args.name?.length > 0
