@@ -40,6 +40,8 @@ cmd = ["docker run #{daemonOrNot}"]
     ['-e', "#{name}=#{val}"]
   .concat _.map (task.ports ? {}), (hostPort, containerPort) ->
     ['-p', "#{containerPort}:#{hostPort}"]
+  .concat _.map (task.link ? {}), (alias, containerName) ->
+    ["--link=#{containerName}:#{alias}"]
   .concat (if task.name then ["--name=#{task.name}"] else [])
   .concat container
   .concat task.cmd

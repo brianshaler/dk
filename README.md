@@ -62,7 +62,6 @@ Command to run:
 ```json
 {"cmd":["my","cmd","--arg"]}
 ```
-(or simply `"my cmd --arg"`)
 
 Set environment variables:
 ```json
@@ -102,7 +101,8 @@ Given the following example JSON file:
   },
   "watch": {
     "cmd": [
-      "gulp watch"
+      "gulp",
+      "watch"
     ],
     "volumes": {
       ".": "/usr/src/app"
@@ -110,7 +110,8 @@ Given the following example JSON file:
   },
   "server": {
     "cmd": [
-      "gulp server"
+      "gulp",
+      "server"
     ],
     "ports": {
       "3000": 80

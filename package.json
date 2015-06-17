@@ -1,6 +1,6 @@
 {
   "name": "dk",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "quickly start docker containers using local .dkrc settings",
   "author": "Brian Shaler",
   "repository": {
